@@ -1,0 +1,36 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Customer Information</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form (submit)="onSubmit()">
+        <mat-form-field>
+          <input matInput placeholder="Customer Name" [(ngModel)]="customer.fullName" name="fullName" required />
+        </mat-form-field>        
+        <mat-form-field>
+          <input matInput type="number" placeholder="Loan Amount" [(ngModel)]="customer.loanAmount" name="loanAmount"
+            required />
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" placeholder="Equity Amount" [(ngModel)]="customer.equityAmount"
+            name="equityAmount" required />
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" placeholder="Salary Amount" [(ngModel)]="customer.salaryAmount"
+            name="salaryAmount" required />
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit">Save</button>
+      </form>
+
+      <div *ngIf="isSubmitted">
+        <h4>Customer Details:</h4>
+        <p><strong>Customer Name:</strong> {{ customer.fullName }}</p>
+        <p><strong>Customer SSN:</strong> {{ customer.customerSsn }}</p>
+        <p><strong>Loan Amount:</strong> {{ customer.loanAmount }}</p>
+        <p><strong>Equity Amount:</strong> {{ customer.equityAmount }}</p>
+        <p><strong>Salary Amount:</strong> {{ customer.salaryAmount }}</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
