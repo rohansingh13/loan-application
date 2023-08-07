@@ -1,8 +1,20 @@
-<mat-toolbar color="primary">
-  <span>Customer Loan Application</span>
-  <span class="spacer"></span>
-  <button mat-button routerLink="/customer">Customer View</button>
-  <button mat-button routerLink="/adviser">Adviser View</button>
-</mat-toolbar>
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a routerLink="adviser" routerLinkActive="active" class="nav-link">Adviser View</a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="customer" routerLinkActive="active" class="nav-link">Customer View</a>
+    </li>
+  </ul>
+</nav>
 
-<router-outlet></router-outlet>
+<!-- <h1 class="text-center"> {{title}} </h1> -->
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
+<footer class="footer">
+  <div class="container">
+    <span>Customer Loan Application</span>
+  </div>
+</footer>

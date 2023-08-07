@@ -1,36 +1,31 @@
-<div class="container">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Customer Information</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <form (submit)="onSubmit()">
-        <mat-form-field>
-          <input matInput placeholder="Customer Name" [(ngModel)]="customer.fullName" name="fullName" required />
-        </mat-form-field>        
-        <mat-form-field>
-          <input matInput type="number" placeholder="Loan Amount" [(ngModel)]="customer.loanAmount" name="loanAmount"
-            required />
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="number" placeholder="Equity Amount" [(ngModel)]="customer.equityAmount"
-            name="equityAmount" required />
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="number" placeholder="Salary Amount" [(ngModel)]="customer.salaryAmount"
-            name="salaryAmount" required />
-        </mat-form-field>
-        <button mat-raised-button color="primary" type="submit">Save</button>
-      </form>
+<div class="col-md-6 offset-md-3">
+  <h3> Create Customer </h3>
+  <form (ngSubmit)="submitForm()" #loanForm="ngForm">
 
-      <div *ngIf="isSubmitted">
-        <h4>Customer Details:</h4>
-        <p><strong>Customer Name:</strong> {{ customer.fullName }}</p>
-        <p><strong>Customer SSN:</strong> {{ customer.customerSsn }}</p>
-        <p><strong>Loan Amount:</strong> {{ customer.loanAmount }}</p>
-        <p><strong>Equity Amount:</strong> {{ customer.equityAmount }}</p>
-        <p><strong>Salary Amount:</strong> {{ customer.salaryAmount }}</p>
-      </div>
-    </mat-card-content>
-  </mat-card>
+    <div class="form-group">
+      <label> Full Name</label>
+      <input type="text" class="form-control" id="fullName" [(ngModel)]="customer.fullName" name="fullName" required>
+    </div>
+
+    <div class="form-group">
+      <label> Loan Amount</label>
+      <input type="number" class="form-control" id="loanAmount" [(ngModel)]="customer.loanAmount" name="loanAmount"
+        required>
+    </div>
+
+    <div class="form-group">
+      <label> Equity Amount</label>
+      <input type="number" class="form-control" id="equityAmount" [(ngModel)]="customer.equityAmount"
+        name="equityAmount" required>
+    </div>
+
+    <div class="form-group">
+      <label> Salary Amount</label>
+      <input type="number" class="form-control" id="salaryAmount" [(ngModel)]="customer.salaryAmount"
+        name="salaryAmount" required>
+    </div>
+
+    <button class="btn btn-success" type="submit">Submit</button>
+
+  </form>
 </div>

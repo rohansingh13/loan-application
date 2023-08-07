@@ -1,43 +1,23 @@
-<div class="container">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Adviser View - Customer Applications</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <table mat-table [dataSource]="customers" class="mat-elevation-z8">
-        <!-- Position Column -->
-        <ng-container matColumnDef="fullName">
-          <th mat-header-cell *matHeaderCellDef> Full Name </th>
-          <td mat-cell *matCellDef="let element"> {{ element.fullName }} </td>
-        </ng-container>
-
-        <!-- Weight Column -->
-        <ng-container matColumnDef="customerSsn">
-          <th mat-header-cell *matHeaderCellDef> Customer SSN </th>
-          <td mat-cell *matCellDef="let element"> {{ element.customerSsn }} </td>
-        </ng-container>
-
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="loanAmount">
-          <th mat-header-cell *matHeaderCellDef> Loan Amount </th>
-          <td mat-cell *matCellDef="let element"> {{ element.loanAmount }} </td>
-        </ng-container>
-
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="equityAmount">
-          <th mat-header-cell *matHeaderCellDef> Equity Amount </th>
-          <td mat-cell *matCellDef="let element"> {{ element.equityAmount }} </td>
-        </ng-container>
-
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="salaryAmount">
-          <th mat-header-cell *matHeaderCellDef> Salary Amount </th>
-          <td mat-cell *matCellDef="let element"> {{ element.salaryAmount }} </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    </mat-card-content>
-  </mat-card>
+<h2>Loan Applications</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Full Name</th>
+      <th>Loan Amount</th>
+      <th>Equity Amount</th>
+      <th>Salary Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let customer of customers">
+      <td> {{ customer.fullName }}</td>
+      <td> {{ customer.loanAmount }}</td>
+      <td> {{ customer.equityAmount }}</td>
+      <td> {{ customer.salaryAmount }}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="pagination">
+  <button [disabled]="currentPage === 0" (click)="onPrev()">Prev</button>
+  <button [disabled]="currentPage >= maxPage" (click)="onNext()">Next</button>
 </div>

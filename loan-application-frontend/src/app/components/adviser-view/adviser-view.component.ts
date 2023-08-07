@@ -10,7 +10,8 @@ import { CustomerService } from 'src/app/service/customer.service';
 export class AdviserViewComponent {
 
   customers: Customer[] = [];
-  displayedColumns: string[] = ['fullName', 'customerSsn', 'loanAmount', 'equityAmount', 'salaryAmount'];
+  currentPage = 0;
+  maxPage = 0;
 
   constructor(private customerService: CustomerService) { }
 
@@ -22,6 +23,16 @@ export class AdviserViewComponent {
     this.customerService.getAllCustomers(0, 10).subscribe((customers) => {
       this.customers = customers;
     });
+  }
+
+  onPrev() {
+    this.currentPage--;
+    this.getCustomers();
+  }
+
+  onNext() {
+    this.currentPage++;
+    this.getCustomers();
   }
 
 }

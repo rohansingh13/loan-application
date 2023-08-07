@@ -9,9 +9,13 @@ import { CustomerService } from 'src/app/service/customer.service';
 })
 export class CustomerViewComponent {
 
-  customer: Customer = new Customer();
-  isSubmitted = false;
-
+  customer: Customer = {
+    fullName: '',
+    loanAmount: 0,
+    equityAmount: 0,
+    salaryAmount: 0
+  }
+  
   constructor(private customerService: CustomerService) { }
 
   ngOnInit(): void {
@@ -20,8 +24,7 @@ export class CustomerViewComponent {
   submitForm() {
     this.customerService.saveCustomer(this.customer).subscribe(
       (savedCustomer) => {
-        this.customer = savedCustomer;
-        this.isSubmitted = true;
+        this.customer = savedCustomer;       
       },
       (error) => {
         console.error('Error saving customer:', error);
