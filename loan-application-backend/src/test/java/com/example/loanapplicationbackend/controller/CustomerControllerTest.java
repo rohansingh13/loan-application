@@ -59,8 +59,8 @@ public class CustomerControllerTest {
 
     @Test
     public void testSaveCustomer() throws Exception {
-        Customer newCustomer = new Customer(0, "Rohan Test", 1500, 800, 2500);
-        Customer savedCustomer = new Customer(1, "Sachin Test", 1500, 800, 2500);
+        Customer newCustomer = new Customer(12546, "Rohan Test", 1500, 800, 2500);
+        Customer savedCustomer = new Customer(58467, "Sachin Test", 1500, 800, 2500);
         when(customerService.saveCustomer(any(Customer.class))).thenReturn(savedCustomer);
 
         ResponseEntity<Customer> response = customerController.saveCustomer(newCustomer);
