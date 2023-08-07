@@ -7,12 +7,15 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { CustomerViewComponent } from './components/customer-view/customer-view.component';
 import { AdviserViewComponent } from './components/adviser-view/adviser-view.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './guards/auth.guard';
 
 @NgModule({
   declarations: [
     AppComponent,
     CustomerViewComponent,
-    AdviserViewComponent
+    AdviserViewComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -20,7 +23,7 @@ import { AdviserViewComponent } from './components/adviser-view/adviser-view.com
     HttpClientModule,
     FormsModule        
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

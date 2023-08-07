@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Customer } from 'src/app/model/customer';
-import { CustomerService } from 'src/app/service/customer.service';
+import { CustomerService } from 'src/app/services/customer.service';
 
 @Component({
   selector: 'app-adviser-view',
