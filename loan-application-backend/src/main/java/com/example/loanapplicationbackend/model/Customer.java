@@ -22,6 +22,17 @@ public class Customer {
 
     private double salaryAmount;
 
+    public Customer() {
+    }
+
+    public Customer(int customerSsn, String fullName, double loanAmount, double equityAmount, double salaryAmount) {
+        this.customerSsn = customerSsn;
+        this.fullName = fullName;
+        this.loanAmount = loanAmount;
+        this.equityAmount = equityAmount;
+        this.salaryAmount = salaryAmount;
+    }
+
     public int getId() {
         return Id;
     }
