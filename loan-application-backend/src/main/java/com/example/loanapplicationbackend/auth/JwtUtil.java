@@ -11,13 +11,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtUtil {
 
-    private final String secret_key = "mysecretkey";
+    private final String secret_key = "afafasfafafasfasfasfafacasdasfasxASFACASDFACASDFASFASFDAFA";
     private long accessTokenValidity = 60 * 60 * 1000;
 
     private final JwtParser jwtParser;
@@ -31,8 +30,6 @@ public class JwtUtil {
 
     public String createToken(User user) {
         Claims claims = Jwts.claims().setSubject(user.getUsername());
-        claims.put("firstName", user.getFirstName());
-        claims.put("lastName", user.getLastName());
         Date tokenCreateTime = new Date();
         Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
         return Jwts.builder()
@@ -79,13 +76,13 @@ public class JwtUtil {
         }
     }
 
-    public String getEmail(Claims claims) {
+/*    public String getEmail(Claims claims) {
         return claims.getSubject();
     }
 
     private List<String> getRoles(Claims claims) {
         return (List<String>) claims.get("roles");
-    }
+    }*/
 
 
 }

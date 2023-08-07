@@ -18,10 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.logging.Logger;
+
 @Controller
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/rest/auth")
 public class AuthController {
+
+    private static final Logger logger = Logger.getLogger(AuthController.class.getName());
+
     private final AuthenticationManager authenticationManager;
 
     private JwtUtil jwtUtil;
@@ -39,15 +44,17 @@ public class AuthController {
         try {
             Authentication authentication =
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getUsername(), loginReq.getPassword()));
-            String email = authentication.getName();
-            User user = new User(email, "");
+            String username = authentication.getName();
+            logger.info("AuthController : login : username="+ username);
+            User user = new User(username, "");
             String token = jwtUtil.createToken(user);
-            LoginRes loginRes = new LoginRes(email, token);
+            LoginRes loginRes = new LoginRes(username, token);
 
             return ResponseEntity.ok(loginRes);
 
         } catch (BadCredentialsException e) {
             ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, "Invalid username or password");
+            logger.severe("AuthController : login : Invalid username or password");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (Exception e) {
             ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());

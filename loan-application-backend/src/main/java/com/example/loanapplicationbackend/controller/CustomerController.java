@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/v1")
 public class CustomerController {
+
+    private static final Logger logger = Logger.getLogger(CustomerController.class.getName());
 
     private CustomerService customerService;
 
@@ -29,6 +32,7 @@ public class CustomerController {
     public ResponseEntity<List<Customer>> getAllCustomers(@RequestParam(defaultValue = "0") int page,
                                                           @RequestParam(defaultValue = "10") int size) {
         List<Customer> customers = customerService.getAllCustomers(page, size);
+        logger.info("CustomerController : getAllCustomers : customers="+ customers);
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 

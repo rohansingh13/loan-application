@@ -80,5 +80,15 @@ public class Customer {
     public void setSalaryAmount(double salaryAmount) {
         this.salaryAmount = salaryAmount;
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "fullName='" + fullName + '\'' +
+                ", loanAmount=" + loanAmount +
+                ", equityAmount=" + equityAmount +
+                ", salaryAmount=" + salaryAmount +
+                '}';
+    }
 }
 

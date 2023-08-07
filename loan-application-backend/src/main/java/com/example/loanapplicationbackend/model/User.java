@@ -3,8 +3,6 @@ package com.example.loanapplicationbackend.model;
 public class User {
     private String username;
     private String password;
-    private String firstName;
-    private String lastName;
 
     public User(String username, String password) {
         this.username = username;
@@ -27,20 +25,5 @@ public class User {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 }
 

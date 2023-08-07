@@ -5,10 +5,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepository {
-    public User findUserByEmail(String email) {
-        User user = new User(email, "123456");
-        user.setFirstName("FirstName");
-        user.setLastName("LastName");
-        return user;
+    public User findUserByEmail(String username) {
+        return new User(username, "123456");
     }
 }
