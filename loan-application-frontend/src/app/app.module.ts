@@ -9,13 +9,17 @@ import { CustomerViewComponent } from './components/customer-view/customer-view.
 import { AdviserViewComponent } from './components/adviser-view/adviser-view.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
+import { HeaderComponent } from './components/header/header.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CustomerViewComponent,
     AdviserViewComponent,
-    LoginComponent
+    LoginComponent,
+    HeaderComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
