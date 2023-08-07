@@ -24,7 +24,6 @@ public class CustomerService {
     }
 
     public List<Customer> getAllCustomers(int page, int size) {
-
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<Customer> customerPage = customerRepository.findAll(pageable);
         return customerPage.getContent();

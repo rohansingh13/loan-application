@@ -8,16 +8,16 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:9090'; 
+  //private apiUrl = 'http://localhost:9090'; 
   private jwtHelper: JwtHelperService = new JwtHelperService();
 
   constructor(private http: HttpClient) { }
 
-  login(username: string, password: string): Observable<any> {
+ /*  login(username: string, password: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/rest/auth/login`, { username, password }).pipe(
       tap(response => this.setToken(response.token))
     );
-  }
+  } */
 
   isLoggedIn(): boolean {
     const token = this.getToken();

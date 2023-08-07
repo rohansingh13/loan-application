@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ export class LoginComponent implements OnInit {
   password: string = '';;
 
   constructor(
+    private userService: UserService,
     private authService: AuthService,
     private router: Router
     ) { }
@@ -21,10 +23,10 @@ export class LoginComponent implements OnInit {
   }  
 
   onSubmit(): void {
-    this.authService.login(this.username, this.password).subscribe(
+    this.userService.login(this.username, this.password).subscribe(
       (response: any) => {
         //this.userAuthService.setRoles(response.user.role);
-        this.authService.setToken(response.jwtToken);
+        this.authService.setToken(response.token);
         this.router.navigate(['/adviser']);       
       },
       (error) => {

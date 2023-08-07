@@ -16,7 +16,6 @@ public class HomeController {
 
     private static final Logger logger = Logger.getLogger(HomeController.class.getName());
 
-
     @ResponseBody
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<String> hello() {
