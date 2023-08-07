@@ -39,7 +39,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-       /* RequestMatcher antPathRequestMatcher = new AntPathRequestMatcher("/rest/auth/**");
+        RequestMatcher antPathRequestMatcher = new AntPathRequestMatcher("/rest/auth/**");
 
         http.csrf().disable()
                 .authorizeRequests()
@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();*/
+        return http.build();
 
 
     }
