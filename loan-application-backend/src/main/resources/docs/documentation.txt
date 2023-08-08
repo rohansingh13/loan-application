@@ -1,0 +1,90 @@
+Customer Loan Application API Documentation
+This API documentation provides details about the available endpoints, request formats, and response formats for the Customer Loan Application.
+
+1. Login
+Endpoint: POST /login
+
+Authenticate a user and generate a JWT token.
+
+Request
+Request Body:
+{
+  "username": "user123",
+  "password": "password123"
+}
+
+Response
+Response Body (Success):
+json
+
+{
+  "token": "your_generated_token_here",
+  "username": "user123"
+}
+
+Status Codes:
+
+200 OK: Successfully authenticated and generated token
+400 Bad Request: Invalid credentials
+
+
+2. Get All Customers
+Endpoint: GET /show-customers
+
+Retrieve a list of customers.
+
+Request
+Query Parameters:
+
+page (optional, default: 0): Page number for pagination
+size (optional, default: 10): Number of items per page
+Response
+Response Body (Success):
+
+[
+  {
+    "id": 1,
+    "customerSsn": "10002",
+    "fullName": "Rohan Test",
+    "loanAmount": "30000"
+    "equityAmount": "20450"
+     "salaryAmount": "500000"
+  },
+  {
+     "id": 1,
+     "customerSsn": "10006",
+     "fullName": "Sachin Test",
+     "loanAmount": "40000"
+     "equityAmount": "70450"
+     "salaryAmount": "800000"
+  },
+]
+
+Status Codes:
+
+200 OK: Successfully retrieved customers
+400 Bad Request: Invalid query parameters
+
+
+
+3. Save Customer
+Endpoint: POST /save-customer
+
+Create a new customer.
+
+Request
+Request Body:
+{
+  "fullName": "Johnny Test",
+   "loanAmount": "70000"
+   "equityAmount": "80450"
+   "salaryAmount": "900000"
+}
+
+Response
+Response Body (Success):
+
+Status Codes:
+
+201 Created: Successfully created customer
+400 Bad Request: Invalid request format or data
