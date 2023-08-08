@@ -7,14 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +32,14 @@ public class CustomerControllerTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
+
     @Test
     public void testGetAllCustomers() throws Exception {
-        List<Customer> mockCustomers  = new ArrayList<>();
-        mockCustomers .add(new Customer(12345, "Rohan Test", 100000, 50000, 60000));
-        mockCustomers .add(new Customer(45678, "Sachin Test", 120000, 60000, 70000));
+        List<Customer> mockCustomers = new ArrayList<>();
+        mockCustomers.add(new Customer(12345, "Rohan Test", 100000, 50000, 60000));
+        mockCustomers.add(new Customer(45678, "Sachin Test", 120000, 60000, 70000));
 
-        when(customerService.getAllCustomers(anyInt(), anyInt())).thenReturn(mockCustomers );
+        when(customerService.getAllCustomers(anyInt(), anyInt())).thenReturn(mockCustomers);
 
         when(customerService.getAllCustomers(anyInt(), anyInt())).thenReturn(mockCustomers);
 
