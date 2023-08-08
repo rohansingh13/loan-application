@@ -19,7 +19,7 @@ public class HomeController {
     @ResponseBody
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<String> hello() {
-        logger.info("HomeController : hello " +  "Home Page");
+        logger.info("HomeController : hello " + "Home Page");
         return ResponseEntity.ok("Hello World");
     }
 }

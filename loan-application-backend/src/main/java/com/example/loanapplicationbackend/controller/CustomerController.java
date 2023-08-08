@@ -2,7 +2,6 @@ package com.example.loanapplicationbackend.controller;
 
 import com.example.loanapplicationbackend.model.Customer;
 import com.example.loanapplicationbackend.service.CustomerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,7 +32,7 @@ public class CustomerController {
     public ResponseEntity<List<Customer>> getAllCustomers(@RequestParam(defaultValue = "0") int page,
                                                           @RequestParam(defaultValue = "10") int size) {
         List<Customer> customers = customerService.getAllCustomers(page, size);
-        logger.info("CustomerController : getAllCustomers : customers="+ customers);
+        logger.info("CustomerController : getAllCustomers : customers=" + customers);
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 

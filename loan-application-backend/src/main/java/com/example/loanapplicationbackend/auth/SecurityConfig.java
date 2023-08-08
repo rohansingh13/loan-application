@@ -28,11 +28,6 @@ public class SecurityConfig {
     private final UserService userService;
     private final JwtAuthenticationFilter filter;
     private final PasswordEncoder passwordEncoder;
-/*
-    public SecurityConfig(JwtAuthenticationEntryPoint point, JwtAuthenticationFilter filter) {
-        this.point = point;
-        this.filter = filter;
-    }*/
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -44,38 +39,14 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-/*
-        http.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable())
-                .authorizeHttpRequests((auth) -> {
-                    auth.requestMatchers("/home/**").authenticated();
-                    auth.requestMatchers("/rest/auth/**").permitAll();
-                    auth.anyRequest().authenticated();
-                })
-                .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
-
-        http.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable())
-                .authorizeHttpRequests((auth) -> {
-                    auth.requestMatchers("/home/**").authenticated()
-                    .requestMatchers("/rest/auth/**").permitAll()
-                    .anyRequest().authenticated();
-                })
-                .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);*/
-
-        http
-                .csrf(AbstractHttpConfigurer::disable
+        http.csrf(AbstractHttpConfigurer::disable
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/home/**","/api/v1/signup", "/api/v1/signin").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/home/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/rest/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
