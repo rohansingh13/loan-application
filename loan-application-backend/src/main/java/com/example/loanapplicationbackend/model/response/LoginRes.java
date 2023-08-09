@@ -4,20 +4,20 @@ import lombok.Builder;
 
 @Builder
 public class LoginRes {
-    private String username;
+    private String email;
     private String token;
 
-    public LoginRes(String username, String token) {
-        this.username = username;
+    public LoginRes(String email, String token) {
+        this.email = email;
         this.token = token;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getToken() {
