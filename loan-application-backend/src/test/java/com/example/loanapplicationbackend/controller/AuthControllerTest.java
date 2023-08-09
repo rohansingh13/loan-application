@@ -14,15 +14,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringJUnitConfig
 public class AuthControllerTest {
@@ -91,7 +90,8 @@ public class AuthControllerTest {
         String password = "password";
 
         LoginReq loginReq = new LoginReq(email, password);
-        when(authenticationManager.authenticate(any())).thenThrow(new AuthenticationException("Authentication failed") {});
+        when(authenticationManager.authenticate(any())).thenThrow(new AuthenticationException("Authentication failed") {
+        });
 
         ResponseEntity responseEntity = authController.login(loginReq);
 
