@@ -1,59 +1,43 @@
 package com.example.loanapplicationbackend.controller;
 
-import com.example.loanapplicationbackend.auth.JwtUtil;
-import com.example.loanapplicationbackend.model.User;
 import com.example.loanapplicationbackend.model.request.LoginReq;
-import com.example.loanapplicationbackend.model.response.ErrorRes;
-import com.example.loanapplicationbackend.model.response.LoginRes;
-import org.springframework.http.HttpStatus;
+import com.example.loanapplicationbackend.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 @Controller
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/rest/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
+    private final AuthService authService;
 
-
-    private JwtUtil jwtUtil;
-
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
-        this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
-
+    /**
+     * Authenticates a user with the provided credentials.
+     *
+     * @param loginReq The request containing the user's login credentials.
+     * @return ResponseEntity containing the authentication result.
+     */
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody LoginReq loginReq) {
+        return authService.login(loginReq);
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity login(@RequestBody LoginReq loginReq) {
-
-        try {
-            Authentication authentication =
-                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getEmail(), loginReq.getPassword()));
-            String email = authentication.getName();
-            User user = new User(email, "");
-            String token = jwtUtil.createToken(user);
-            LoginRes loginRes = new LoginRes(email, token);
-
-            return ResponseEntity.ok(loginRes);
-
-        } catch (BadCredentialsException e) {
-            ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, "Invalid username or password");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-        } catch (Exception e) {
-            ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-        }
+    /**
+     * Registers a new user with the provided credentials.
+     *
+     * @param loginReq The request containing the user's sign-up credentials.
+     * @return ResponseEntity containing the sign-up result.
+     */
+    @PostMapping("/signup")
+    public ResponseEntity signup(@RequestBody LoginReq loginReq) {
+        return authService.signup(loginReq);
     }
 }

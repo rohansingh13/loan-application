@@ -1,25 +1,22 @@
 package com.example.loanapplicationbackend.controller;
 
-import com.example.loanapplicationbackend.auth.JwtUtil;
 import com.example.loanapplicationbackend.model.request.LoginReq;
 import com.example.loanapplicationbackend.model.response.ErrorRes;
 import com.example.loanapplicationbackend.model.response.LoginRes;
+import com.example.loanapplicationbackend.service.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -27,117 +24,71 @@ import static org.mockito.Mockito.when;
 public class AuthControllerTest {
 
     @Mock
-    private AuthenticationManager authenticationManager;
-
-    @Mock
-    private JwtUtil jwtUtil;
+    private AuthService authService;
 
     @InjectMocks
     private AuthController authController;
 
     @BeforeEach
-    public void setUp() {
-        authController = new AuthController(authenticationManager, jwtUtil);
+    public void setup() {
+        authController = new AuthController(authService);
     }
 
     @Test
-    public void testSuccessfulLogin() {
-        String email = "test@example.com";
-        String password = "password";
-        String token = "someToken";
+    public void testLogin_Success() {
+        LoginReq loginReq = new LoginReq("user1", "user123");
+        when(authService.login(any(LoginReq.class))).thenReturn(ResponseEntity.ok(new LoginRes("user1", "token")));
 
-        LoginReq loginReq = new LoginReq(email, password);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
-        when(authenticationManager.authenticate(any())).thenReturn(authentication);
+        ResponseEntity response = authController.login(loginReq);
 
-        when(jwtUtil.createToken(any())).thenReturn(token);
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody() instanceof LoginRes);
 
-        ResponseEntity responseEntity = authController.login(loginReq);
+        LoginRes loginRes = (LoginRes) response.getBody();
+        assertNotNull(loginRes);
+        assertEquals("user1", loginRes.getUsername());
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertTrue(responseEntity.getBody() instanceof LoginRes);
-
-        LoginRes loginRes = (LoginRes) responseEntity.getBody();
-        assertEquals(email, loginRes.getEmail());
-        assertEquals(token, loginRes.getToken());
-
-        verify(authenticationManager).authenticate(any());
-        verify(jwtUtil).createToken(any());
+        verify(authService, times(1)).login(loginReq);
     }
 
     @Test
-    public void testInvalidLoginCredentials() {
-        String email = "test@example.com";
-        String password = "password";
+    public void testSignup_Success() {
+        LoginReq signupReq = new LoginReq("username", "password");
 
-        LoginReq loginReq = new LoginReq(email, password);
-        when(authenticationManager.authenticate(any())).thenThrow(new BadCredentialsException("Invalid credentials"));
+        when(authService.signup(any(LoginReq.class))).thenReturn(ResponseEntity.ok(new LoginRes("username", "token")));
 
-        ResponseEntity responseEntity = authController.login(loginReq);
+        ResponseEntity response = authController.signup(signupReq);
 
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertTrue(responseEntity.getBody() instanceof ErrorRes);
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody() instanceof LoginRes);
 
-        ErrorRes errorRes = (ErrorRes) responseEntity.getBody();
-        assertEquals("Invalid username or password", errorRes.getMessage());
+        LoginRes loginRes = (LoginRes) response.getBody();
+        assertNotNull(loginRes);
+        assertEquals("username", loginRes.getUsername());
 
-        verify(authenticationManager).authenticate(any());
+        verify(authService, times(1)).signup(signupReq);
     }
 
-    @Test
-    public void testExceptionDuringAuthentication() {
-        String email = "test@example.com";
-        String password = "password";
-
-        LoginReq loginReq = new LoginReq(email, password);
-        when(authenticationManager.authenticate(any())).thenThrow(new AuthenticationException("Authentication failed") {
-        });
-
-        ResponseEntity responseEntity = authController.login(loginReq);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertTrue(responseEntity.getBody() instanceof ErrorRes);
-
-        ErrorRes errorRes = (ErrorRes) responseEntity.getBody();
-        assertEquals("Authentication failed", errorRes.getMessage());
-
-        verify(authenticationManager).authenticate(any());
-    }
 
     @Test
-    public void testExceptionDuringJwtTokenCreation() {
-        String email = "test@example.com";
-        String password = "password";
+    public void testLogin_Failure_BadCredentials() {
+        LoginReq loginReq = new LoginReq("username", "wrongpassword");
 
-        LoginReq loginReq = new LoginReq(email, password);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
-        when(authenticationManager.authenticate(any())).thenReturn(authentication);
+        when(authService.login(any(LoginReq.class))).thenReturn(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRes(HttpStatus.BAD_REQUEST, "Invalid username or password")));
 
-        when(jwtUtil.createToken(any())).thenThrow(new RuntimeException("Token creation failed"));
+        ResponseEntity response = authController.login(loginReq);
 
-        ResponseEntity responseEntity = authController.login(loginReq);
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(response.getBody() instanceof ErrorRes);
 
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertTrue(responseEntity.getBody() instanceof ErrorRes);
+        ErrorRes errorResponse = (ErrorRes) response.getBody();
+        assertNotNull(errorResponse);
+        assertEquals("Invalid username or password", errorResponse.getMessage());
 
-        ErrorRes errorRes = (ErrorRes) responseEntity.getBody();
-        assertEquals("Token creation failed", errorRes.getMessage());
-
-        verify(authenticationManager).authenticate(any());
-        verify(jwtUtil).createToken(any());
-    }
-
-    @Test
-    public void testInvalidRequest() {
-        LoginReq loginReq = new LoginReq(null, null); // Invalid request with null email and password
-
-        ResponseEntity responseEntity = authController.login(loginReq);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertTrue(responseEntity.getBody() instanceof ErrorRes);
-
-        ErrorRes errorRes = (ErrorRes) responseEntity.getBody();
-        assertEquals("Invalid request", errorRes.getMessage());
+        verify(authService, times(1)).login(loginReq);
     }
 }
 

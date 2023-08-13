@@ -1,7 +1,8 @@
 Customer Loan Application API Documentation
 This API documentation provides details about the available endpoints, request formats, and response formats for the Customer Loan Application.
 
-1. Login
+--------------------------------------------------------------------------------------
+1. Login Endpoint:
 Endpoint: POST /login
 
 Authenticate a user and generate a JWT token.
@@ -24,11 +25,41 @@ json
 
 Status Codes:
 
-200 OK: Successfully authenticated and generated token
-400 Bad Request: Invalid credentials
+200 OK: Successfully authenticated and generated token.
+400 Bad Request: Invalid credentials (either username or password is incorrect).
+400 Bad Request: User not found (username does not exist).
+400 Bad Request: Other general error during authentication.
 
 
-2. Get All Customers
+
+------------------------------------------------------------------------------------
+2. Signup Endpoint:
+
+Registers a new user with the provided credentials.
+
+Request
+Request Body:
+{
+  "username": "newuser",
+  "password": "newuser123"
+}
+
+Response
+Response Body (Success):
+json
+
+{
+  "token": "your_generated_token_here",
+  "username": "newuser"
+}
+
+Status Codes:
+200 OK: User successfully created and token generated.
+400 Bad Request: Username is already taken.
+400 Bad Request: Other general error during user creation.
+
+-----------------------------------------------------------------------------------------------
+3. Get All Customers
 Endpoint: GET /show-customers
 
 Retrieve a list of customers.
@@ -65,9 +96,9 @@ Status Codes:
 200 OK: Successfully retrieved customers
 400 Bad Request: Invalid query parameters
 
+-------------------------------------------------------------------------------------------------
 
-
-3. Save Customer
+4. Save Customer
 Endpoint: POST /save-customer
 
 Create a new customer.

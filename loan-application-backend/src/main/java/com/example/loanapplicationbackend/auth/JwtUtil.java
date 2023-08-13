@@ -1,6 +1,5 @@
 package com.example.loanapplicationbackend.auth;
 
-import com.example.loanapplicationbackend.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
@@ -10,6 +9,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +22,7 @@ public class JwtUtil {
     private final String secret_key = "48a868a4042f634ac04a117f00a87202131dd7c46c4b32c4acb3edc5e15f4511";
     private long accessTokenValidity = 60 * 60 * 1000;
 
+
     private final JwtParser jwtParser;
 
     private final String TOKEN_HEADER = "Authorization";
@@ -29,16 +32,23 @@ public class JwtUtil {
         this.jwtParser = Jwts.parser().setSigningKey(secret_key);
     }
 
-    public String createToken(User user) {
-        Claims claims = Jwts.claims().setSubject(user.getEmail());
-        claims.put("firstName", user.getFirstName());
-        claims.put("lastName", user.getLastName());
+
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = Base64.getDecoder().decode(secret_key);
+        return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
+    }
+
+    public String createToken(String username) {
+        Date now = new Date();
         Date tokenCreateTime = new Date();
         Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
-        return Jwts.builder()
-                .setClaims(claims)
+
+        return Jwts
+                .builder()
+                .setSubject(username)
+                .setIssuedAt(now)
                 .setExpiration(tokenValidity)
-                .signWith(SignatureAlgorithm.HS256, secret_key)
+                .signWith(SignatureAlgorithm.HS256, getSigningKey())
                 .compact();
     }
 
@@ -86,6 +96,5 @@ public class JwtUtil {
     private List<String> getRoles(Claims claims) {
         return (List<String>) claims.get("roles");
     }
-
 
 }

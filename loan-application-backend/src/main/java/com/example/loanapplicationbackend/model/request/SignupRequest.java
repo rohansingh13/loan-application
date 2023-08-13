@@ -1,13 +1,14 @@
 package com.example.loanapplicationbackend.model.request;
 
-public class LoginReq {
+import java.util.Set;
+
+public class SignupRequest {
+
     private String username;
+
     private String password;
 
-    public LoginReq(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
+    private Set<String> role;
 
     public String getUsername() {
         return username;
@@ -23,5 +24,13 @@ public class LoginReq {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<String> getRole() {
+        return role;
+    }
+
+    public void setRole(Set<String> role) {
+        this.role = role;
     }
 }
