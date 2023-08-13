@@ -16,7 +16,6 @@ Welcome to the Customer Loan Application project! This application allows custom
 - [API Documentation](#api-documentation)
 - [Technologies Used](#technologies-used)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Overview
 
@@ -60,6 +59,49 @@ To run the frontend application, use the following command:
 
 The backend will be accessible at `http://localhost:9090` and the frontend at `http://localhost:4200`.
 
+##Testing through Postman
+We can test the backend using Postman as below:
+
+1. Admin user is created on server startup.
+2. Make sure to execute the sql statements in schema.sql and data.sql kept under resources.
+3. Then we can test the various endpoints with request:
+
+i. Login Endpoint:
+- http://localhost:9090/rest/auth/login
+- Endpoint: POST /login
+
+Request Body:
+{
+    "username": "admin",
+    "password": "admin"
+}
+
+ii. Signup Endpoint:
+-http://localhost:9090/rest/auth/signup
+
+Request Body:
+{
+    "username":"user3",
+    "password":"user123"
+}
+
+iii. Use the token generated in the above request to call the other below endpoints:
+
+- http://localhost:9090/rest/home
+- http://localhost:9090/api/v1/show-customers?page=0&size=10
+- http://localhost:9090/api/v1/save-customer
+
+Request for save-customer:
+
+{
+    "fullName": "Rohan Testsuser",
+    "loanAmount": 90000,
+    "equityAmount": 40457,
+    "salaryAmount": 1000000        
+}
+
+
+
 ## Tests
 
 The application includes both unit tests and integration tests.
@@ -83,7 +125,18 @@ The API documentation is built using Swagger. It includes details about the avai
 
 ## Documentation for deployment using cloud services
 
-The documentation for deployment of the application on AWS using AWS Elastic BeanStalk can be found in DEPLOYMENTAWS.md file in the git root path.
+There are 2 approaches that I have looked into for deployment using AWS cloud services.
+
+1. AWS EC2
+- The documentation for deployment of the application on AWS using AWS EC2 can be found in AWS_EC2_DEPLOYMENT.md file in the git root path.
+- I have also deployed a spring boot application on cloud using EC2 and the same can be accessed at :
+- http://ec2-16-171-206-111.eu-north-1.compute.amazonaws.com:9098/
+
+- The steps for deploying the spring boot application using AWS EC2 with snapshots can be found in the word file 
+- File: Steps_to_deploy_the_Spring_Boot_application_on_AWS_using_AWS_EC2.docx in the root directory.
+
+2. AWS Elastic BeanStalk
+- The documentation for deployment of the application on AWS using AWS Elastic BeanStalk can be found in DEPLOYMENTAWS.md file in the git root path.
 
 ## Technologies Used
 

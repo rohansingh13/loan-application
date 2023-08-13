@@ -40,8 +40,8 @@ Registers a new user with the provided credentials.
 Request
 Request Body:
 {
-  "username": "newuser",
-  "password": "newuser123"
+  "username": "user123",
+  "password": "password123"
 }
 
 Response
