@@ -1,5 +1,6 @@
 package com.example.loanapplicationbackend.controller;
 
+import com.example.loanapplicationbackend.model.User;
 import com.example.loanapplicationbackend.model.request.LoginReq;
 import com.example.loanapplicationbackend.model.response.ErrorRes;
 import com.example.loanapplicationbackend.model.response.LoginRes;
@@ -37,7 +38,13 @@ public class AuthControllerTest {
     @Test
     public void testLogin_Success() {
         LoginReq loginReq = new LoginReq("user1", "user123");
-        when(authService.login(any(LoginReq.class))).thenReturn(ResponseEntity.ok(new LoginRes("user1", "token")));
+
+        User user = new User();
+        user.setUsername("user1");
+
+        LoginRes loginRes = new LoginRes(user, "token");
+
+        when(authService.login(any(LoginReq.class))).thenReturn(ResponseEntity.ok(loginRes));
 
         ResponseEntity response = authController.login(loginReq);
 
@@ -45,9 +52,9 @@ public class AuthControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody() instanceof LoginRes);
 
-        LoginRes loginRes = (LoginRes) response.getBody();
-        assertNotNull(loginRes);
-        assertEquals("user1", loginRes.getUsername());
+        LoginRes actualLoginRes = (LoginRes) response.getBody();
+        assertNotNull(actualLoginRes);
+        assertEquals("user1", actualLoginRes);
 
         verify(authService, times(1)).login(loginReq);
     }
@@ -56,7 +63,12 @@ public class AuthControllerTest {
     public void testSignup_Success() {
         LoginReq signupReq = new LoginReq("username", "password");
 
-        when(authService.signup(any(LoginReq.class))).thenReturn(ResponseEntity.ok(new LoginRes("username", "token")));
+        User user = new User();
+        user.setUsername("username");
+
+        LoginRes loginRes = new LoginRes(user, "token");
+
+        when(authService.signup(any(LoginReq.class))).thenReturn(ResponseEntity.ok(loginRes));
 
         ResponseEntity response = authController.signup(signupReq);
 
@@ -64,9 +76,9 @@ public class AuthControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody() instanceof LoginRes);
 
-        LoginRes loginRes = (LoginRes) response.getBody();
-        assertNotNull(loginRes);
-        assertEquals("username", loginRes.getUsername());
+        LoginRes actualLoginRes = (LoginRes) response.getBody();
+        assertNotNull(actualLoginRes);
+        assertEquals("username", actualLoginRes);
 
         verify(authService, times(1)).signup(signupReq);
     }

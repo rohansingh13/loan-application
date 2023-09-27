@@ -1,25 +1,30 @@
 package com.example.loanapplicationbackend.controller;
 
 import com.example.loanapplicationbackend.model.Customer;
+import com.example.loanapplicationbackend.model.CustomerPageResponse;
 import com.example.loanapplicationbackend.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@SpringJUnitConfig
 public class CustomerControllerTest {
 
     @InjectMocks
@@ -35,20 +40,27 @@ public class CustomerControllerTest {
 
     @Test
     public void testGetAllCustomers() throws Exception {
-        List<Customer> mockCustomers = new ArrayList<>();
-        mockCustomers.add(new Customer(12345, "Rohan Test", 100000, 50000, 60000));
-        mockCustomers.add(new Customer(45678, "Sachin Test", 120000, 60000, 70000));
+        Page<Customer> mockCustomerPage = new PageImpl<>(Arrays.asList(
+                new Customer(12345, "Rohan Test", 100000, 50000, 60000),
+                new Customer(45678, "Sachin Test", 120000, 60000, 70000)
+        ));
 
-        when(customerService.getAllCustomers(anyInt(), anyInt())).thenReturn(mockCustomers);
-
-        when(customerService.getAllCustomers(anyInt(), anyInt())).thenReturn(mockCustomers);
+        // Mock the service method to return the mock Page
+        when(customerService.getAllCustomers(anyInt(), anyInt())).thenReturn(mockCustomerPage);
 
         // Perform the test
-        ResponseEntity<List<Customer>> response = customerController.getAllCustomers(0, 10);
+        ResponseEntity<CustomerPageResponse> response = customerController.getAllCustomers(0, 10);
 
         // Assertions
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(mockCustomers, response.getBody());
+
+        // Verify that the returned CustomerPageResponse contains the expected values
+        CustomerPageResponse customerPageResponse = response.getBody();
+        assertNotNull(customerPageResponse);
+        assertEquals(mockCustomerPage.getContent(), customerPageResponse.getCustomers());
+        assertEquals(mockCustomerPage.getTotalElements(), customerPageResponse.getTotalCustomers());
+
+        // Verify that the service method was called with the correct parameters
         verify(customerService, times(1)).getAllCustomers(0, 10);
     }
 
