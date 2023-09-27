@@ -2,6 +2,7 @@ package com.example.loanapplicationbackend.service;
 
 import com.example.loanapplicationbackend.model.User;
 import com.example.loanapplicationbackend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,6 +40,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    @Transactional
     public User save(User newUser) {
         return userRepository.save(newUser);
     }
