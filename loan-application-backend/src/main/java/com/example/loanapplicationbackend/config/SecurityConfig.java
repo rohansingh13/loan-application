@@ -53,16 +53,12 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/rest/auth/**", "/rest/home").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/h2-console/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/rest/home").permitAll()
                         .anyRequest().authenticated()
-                )
-                .headers(headers -> headers
-                        .frameOptions().disable() // Disable frameOptions to enable H2 Console
                 )
                 .authenticationProvider(authenticationProvider()).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
 
 }

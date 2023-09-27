@@ -89,12 +89,4 @@ public class JwtUtil {
         }
     }
 
-    public String getEmail(Claims claims) {
-        return claims.getSubject();
-    }
-
-    private List<String> getRoles(Claims claims) {
-        return (List<String>) claims.get("roles");
-    }
-
 }
