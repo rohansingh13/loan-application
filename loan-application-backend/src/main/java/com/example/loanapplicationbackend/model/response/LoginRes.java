@@ -1,30 +1,32 @@
 package com.example.loanapplicationbackend.model.response;
 
+import com.example.loanapplicationbackend.model.User;
 import lombok.Builder;
 
 @Builder
 public class LoginRes {
-    private String username;
-    private String token;
+    private User user;
+    private String jwtToken;
 
-    public LoginRes(String username, String token) {
-        this.username = username;
-        this.token = token;
+
+    public LoginRes(User user, String jwtToken) {
+        this.user = user;
+        this.jwtToken = jwtToken;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getToken() {
-        return token;
+    public String getJwtToken() {
+        return jwtToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
     }
 }
