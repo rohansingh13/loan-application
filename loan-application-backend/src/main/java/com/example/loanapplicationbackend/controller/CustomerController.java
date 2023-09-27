@@ -1,10 +1,12 @@
 package com.example.loanapplicationbackend.controller;
 
 import com.example.loanapplicationbackend.model.Customer;
+import com.example.loanapplicationbackend.model.CustomerPageResponse;
 import com.example.loanapplicationbackend.service.CustomerService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +18,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/v1")
 public class CustomerController {
 
@@ -29,11 +30,20 @@ public class CustomerController {
     }
 
     @GetMapping("/show-customers")
-    public ResponseEntity<List<Customer>> getAllCustomers(@RequestParam(defaultValue = "0") int page,
-                                                          @RequestParam(defaultValue = "10") int size) {
-        List<Customer> customers = customerService.getAllCustomers(page, size);
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<CustomerPageResponse> getAllCustomers(@RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "10") int size) {
+
+        Page<Customer> customerPage = customerService.getAllCustomers(page, size);
+        List<Customer> customers = customerPage.getContent();
         logger.info("CustomerController : getAllCustomers : customers=" + customers);
-        return new ResponseEntity<>(customers, HttpStatus.OK);
+        long totalCustomers = customerPage.getTotalElements();
+
+        CustomerPageResponse response = new CustomerPageResponse();
+        response.setCustomers(customers);
+        response.setTotalCustomers(totalCustomers);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/save-customer")
