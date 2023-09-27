@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Customer } from 'src/app/model/customer';
+import { Customer } from 'src/app/models/customer';
 import { CustomerService } from 'src/app/services/customer.service';
 
 @Component({
@@ -15,6 +15,9 @@ export class CustomerViewComponent {
     equityAmount: 0,
     salaryAmount: 0
   }
+
+  successMessage: string = '';
+  errorMessage: string = '';
   
   constructor(private customerService: CustomerService) { }
 
@@ -24,10 +27,14 @@ export class CustomerViewComponent {
   submitForm() {
     this.customerService.saveCustomer(this.customer).subscribe(
       (savedCustomer) => {
-        this.customer = savedCustomer;       
+        this.customer = savedCustomer;  
+        this.successMessage = 'Customer created successfully.';
+        this.errorMessage = '';      
       },
       (error) => {
         console.error('Error saving customer:', error);
+        this.errorMessage = 'Error creating customer. Please try again.';
+        this.successMessage = ''; 
       }
     );
   }

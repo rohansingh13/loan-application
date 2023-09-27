@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { TokenStorageService } from 'src/app/services/token-storage.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit {  
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
+    private tokenStorageService: TokenStorageService,
     private router: Router    
   ) { }
 
@@ -18,13 +20,12 @@ export class HeaderComponent implements OnInit {
   }
 
   public isLoggedIn() {
-    const isUserLoggedIn = this.authService.isLoggedIn();
-    console.log('Is User Logged In:', isUserLoggedIn);
+    const isUserLoggedIn = this.tokenStorageService.isLoggedIn();   
     return isUserLoggedIn; 
   }
 
   public logout() {
-    this.authService.clear();
+    this.tokenStorageService.clear();
     this.router.navigate(['/home']);
   }
 

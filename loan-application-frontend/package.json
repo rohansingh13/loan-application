@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "backend-proxy": "node backend-proxy.js"
   },
   "private": true,
   "dependencies": {
@@ -24,7 +25,10 @@
     "@auth0/angular-jwt": "^5.0.2",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.1",
+    "cors": "^2.8.5",
+    "http-proxy-middleware": "^2.0.6",
     "jquery": "^3.7.0",
+    "morgan": "^1.10.0",
     "ngx-toastr": "^11.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

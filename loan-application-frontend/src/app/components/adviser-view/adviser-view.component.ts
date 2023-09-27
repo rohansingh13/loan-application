@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Customer } from 'src/app/model/customer';
+import { Customer } from 'src/app/models/customer';
+import { CustomerPageResponse } from 'src/app/models/customer-page-response';
 import { CustomerService } from 'src/app/services/customer.service';
 
 @Component({
@@ -10,8 +11,11 @@ import { CustomerService } from 'src/app/services/customer.service';
 export class AdviserViewComponent {
 
   customers: Customer[] = [];
+  totalCustomers: number = 0;
+  totalPages: number = 0;
   currentPage = 0;
-  maxPage = 0;
+  pageSize = 10;  
+  //maxPage = 0;
 
   constructor(private customerService: CustomerService) { }
 
@@ -20,19 +24,30 @@ export class AdviserViewComponent {
   }
 
   getCustomers(): void {
-    this.customerService.getAllCustomers(0, 10).subscribe((customers) => {
-      this.customers = customers;
-    });
+    this.customerService.getAllCustomers(this.currentPage, this.pageSize).subscribe(
+      (customerPageResponse) => {
+        this.customers = customerPageResponse.customers;
+        this.totalPages = Math.ceil(customerPageResponse.totalCustomers / 10); 
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   onPrev() {
-    this.currentPage--;
-    this.getCustomers();
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.getCustomers();
+    }
   }
 
   onNext() {
-    this.currentPage++;
-    this.getCustomers();
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.getCustomers();
+    }
   }
+
 
 }
