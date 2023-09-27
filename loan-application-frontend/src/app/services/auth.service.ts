@@ -1,51 +1,68 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError, map, tap } from 'rxjs/operators';
+import { LoginResponse } from '../models/login-response';
+import { LoginRequest } from '../models/login-request';
+import { SignupRequest } from '../models/signup-request';
+import { TokenStorageService } from './token-storage.service';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
-  //private apiUrl = 'http://localhost:9090'; 
-  private jwtHelper: JwtHelperService = new JwtHelperService();
+export class AuthService { 
 
-  constructor(private http: HttpClient) { }
+  private baseUrl = 'http://localhost:3040/rest/auth';
 
- /*  login(username: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/rest/auth/login`, { username, password }).pipe(
-      tap(response => this.setToken(response.token))
-    );
-  } */
+  constructor(
+    private httpClient: HttpClient,
+    private tokenStorageService: TokenStorageService
+    ) { }
 
-  isLoggedIn(): boolean {
-    const token = this.getToken();
-    console.log('Token:', token);
+  public login(loginRequest: LoginRequest): Observable<LoginResponse> {   
+    return this.httpClient.post<LoginResponse>(`${this.baseUrl}/login`, loginRequest, httpOptions)
+      .pipe(
+        map(response => {
+          console.log(response);          
+          return response;
+        }),
+        catchError(error => {
+          console.log(error);
+          throw error;
+        })
+      );
+  } 
 
-    const isTokenExpired = token && this.jwtHelper.isTokenExpired(token);
-    console.log('Is Token Expired:', isTokenExpired);
-    
-    if (typeof token === 'string') {
-      return !this.jwtHelper.isTokenExpired(token);
-      
+  register(loginRequest: LoginRequest): Observable<LoginResponse> {
+    return this.httpClient.post<LoginResponse>(`${this.baseUrl}/signup`, loginRequest, httpOptions)
+      .pipe(
+        map(response => {
+          // Save token in localStorage or cookie
+          localStorage.setItem('token', response.token);
+          return response;
+        }),
+        catchError(error => {
+          throw error;
+        })
+      );
+  } 
+
+  public roleMatch(allowedRole: string): boolean {
+    let isMatch = false;
+    const userRole: any = this.tokenStorageService.getRole();
+
+    if (userRole != null && userRole) {
+      if (userRole === allowedRole) {
+        isMatch = true;
+      }
     }
-    return false;
-  }
 
-  setToken(token: string): void {
-    localStorage.setItem('jwt_token', token);
+    return isMatch;
   }
-
-  getToken(): string | null {
-    return localStorage.getItem('jwt_token');
-  }
-
-  logout(): void {
-    localStorage.removeItem('jwt_token');
-  }
-
-  clear() {
-    localStorage.clear();
-  }
+  
 }
