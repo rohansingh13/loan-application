@@ -81,7 +81,7 @@ ii. Signup Endpoint:
 
 Request Body:
 {
-    "username":"user3",
+    "username":"user1",
     "password":"user123"
 }
 
@@ -143,8 +143,7 @@ There are 2 approaches that I have looked into for deployment using AWS cloud se
 - Spring Boot
 - Angular
 - JSON Web Tokens (JWT) for authentication
-- H2 in-memory database (for development)
-- PostgreSQL/MySQL (for production)
+- MySQL database (for development)
 - Spring Boot Actuator for monitoring
 
 ## Contributing
